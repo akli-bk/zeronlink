@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>zeronlink</title>
+    <style>
+        html, body {
+            background: #000;
+            margin: 0;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .centered {
+            width: 400px;
+            height: 400px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #000;
+            filter: blur(10px) contrast(20);
+        }
+        .blob-1, .blob-2 {
+            width: 70px;
+            height: 70px;
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .blob-1 {
+            left: 20%;
+            animation: osc-l 2.5s ease infinite;
+        }
+        .blob-2 {
+            left: 80%;
+            animation: osc-r 2.5s ease infinite;
+            background: #0ff;
+        }
+        @keyframes osc-l {
+            0% { left: 20%; }
+            50% { left: 50%; }
+            100% { left: 20%; }
+        }
+        @keyframes osc-r {
+            0% { left: 80%; }
+            50% { left: 50%; }
+            100% { left: 80%; }
+        }
+        .loading-text {
+            position: absolute;
+            top: calc(50% + 250px); /* 调整位置使其在动画容器下方 */
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            animation: blinking 1.5s infinite;
+        }
+        @keyframes blinking {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        iframe {
+            display: none;
+        }
+    </style>
+    <script>
+        function checkIframeLoaded() {
+            var iframe = document.getElementById('hiddenIframe');
+            if (iframe) {
+                var loadInterval = setInterval(function() {
+                    if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') {
+                        clearInterval(loadInterval);
+                        window.location.href = 'https://my.zeronlink.com';
+                    }
+                }, 1000); // Check every 1 second
+                
+                setTimeout(function() {
+                    clearInterval(loadInterval);
+                    alert('目标网页加载超时，请稍后再试。');
+                }, 10000); // Timeout after 10 seconds
+                
+                iframe.onerror = function() {
+                    clearInterval(loadInterval);
+                    alert('目标网页加载错误，请稍后再试。');
+                };
+            }
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            checkIframeLoaded();
+        });
+    </script>
+</head>
+<body>
+    <div class="centered">
+        <div class="blob-1"></div>
+        <div class="blob-2"></div>
+    </div>
+    <div class="loading-text">正在加载</div>
+    <iframe id="hiddenIframe" src="https://my.zeronlink.com"></iframe>
+</body>
+</html>
